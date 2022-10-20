@@ -15,7 +15,6 @@ def get_point(image):
     tree = ET.parse('masks.xml')
     root = tree.getroot()
     color = (115, 51, 128)
-    isClosed = True
     thickness = 2
     for i in root.findall('image'):
         if i.attrib['name'].split('/')[-1] == image_name:
