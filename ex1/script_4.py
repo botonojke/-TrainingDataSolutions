@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
+import os
 
-file_name = input('Please enter file name path: ')
 
 def chenge_file(file_name):
     tree = ET.parse(file_name)
@@ -13,6 +13,9 @@ def chenge_file(file_name):
     file = file_name.split('\\')[-1].split('.')[0]
     tree.write(f"{file}-copy.xml", encoding='utf-8')
 
-if __name__ == "__main__":
-    chenge_file(file_name)
+for root, dirs, files in os.walk('.'):
+    for file in files:
+        if file.endswith(".xml"):
+            path_file = os.path.join(root, file)
+            chenge_file(path_file)
 

@@ -1,19 +1,10 @@
-# import os
-#
-# for root, dirs, files in os.walk(".//"):
-#     for file in files:
-#         if file.endswith(".xml"):
-#             path_file = os.path.join(root, file)
-#             print(path_file)
-
+import os
 import xml.etree.ElementTree as ET
-
-# file_name = input('Please enter file name path: ')
-files = ['annotations.xml', 'annotations-2.xml', 'annotations-3.xml']
 
 
 def total_stats(file_name):
-    tree = ET.parse(file_name)
+    file = file_name.split('\\')[-1]
+    tree = ET.parse(file)
     root = tree.getroot()
     all_image = 0
     image_with = 0
@@ -54,25 +45,33 @@ def total_stats(file_name):
         else:
             image_without += 1
     if image_without != 0:
-        print(f"В файле {file_name}\n"
-              f"Всего изображений: {all_image}\n"
-              f"Не размечено изображений: {image_without}\n"
-              f"Всего изображений размечено: {image_with}\n"
-              f"Всего фигур {all_figure}\n"
-              f"Самое большое изображение {max_screen}, таких изображений в файле {screen.count(max_screen)}\n"
-              f"Пример: {max_name}\n"
-              f"Самое маленькое изображение {min_screen}, таких изображений в файле {screen.count(min_screen)}\n"
-              f"Пример: {min_name}\n")
+        return f"В файле {file}\n" \
+              f"Всего изображений: {all_image}\n" \
+              f"Не размечено изображений: {image_without}\n" \
+              f"Всего изображений размечено: {image_with}\n" \
+              f"Всего фигур {all_figure}\n" \
+              f"Самое большое изображение {max_screen}, таких изображений в файле {screen.count(max_screen)}\n" \
+              f"Пример: {max_name}\n" \
+              f"Самое маленькое изображение {min_screen}, таких изображений в файле {screen.count(min_screen)}\n" \
+              f"Пример: {min_name}\n\n"
     else:
-        print(f"В файле {file_name}\n"
-              f"Всего изображений: {all_image}\n"
-              f"Изображений размечено: {image_with}\n"
-              f"Всего фигур {all_figure}\n"
-              f"Самое большое изображение {max_screen}, таких изображений в файле {screen.count(max_screen)}\n"
-              f"Пример: {max_name}\n"
-              f"Самое маленькое изображение {min_screen}, таких изображений в файле {screen.count(min_screen)}\n"
-              f"Пример: {min_name}\n")
+        return f"В файле {file}\n" \
+              f"Всего изображений: {all_image}\n" \
+              f"Изображений размечено: {image_with}\n" \
+              f"Всего фигур {all_figure}\n" \
+              f"Самое большое изображение {max_screen}, таких изображений в файле {screen.count(max_screen)}\n" \
+              f"Пример: {max_name}\n" \
+              f"Самое маленькое изображение {min_screen}, таких изображений в файле {screen.count(min_screen)}\n" \
+              f"Пример: {min_name}\n\n"
+
+with open('script_1.txt', 'w', encoding='utf-8') as fl:
+    for root, dirs, files in os.walk('.'):
+        for file in files:
+            if file.endswith("copy.xml"):
+                continue
+            elif file.endswith(".xml"):
+                path_file = os.path.join(root, file)
+                fl.writelines(total_stats(path_file))
 
 
-for file in files:
-    total_stats(file)
+
