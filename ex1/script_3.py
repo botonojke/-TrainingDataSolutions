@@ -28,6 +28,8 @@ def parse_xml(file_name):
 
 for root, dirs, files in os.walk('.'):
     for file in files:
+        # if file.endswith("copy.xml"):
+        #     continue
         if file.endswith(".xml"):
             path_file = os.path.join(root, file)
             parse_xml(path_file)
