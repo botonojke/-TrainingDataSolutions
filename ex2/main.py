@@ -8,7 +8,7 @@ def get_skin_color(xml: str):
     """Get skin color from xml file"""
     tree = ET.parse(xml)
     root = tree.getroot()
-
+    # Traversal of xml tree to get color
     for meta in root.findall('meta'):
         for task in meta.findall('task'):
             for labels in task.findall('labels'):
@@ -27,6 +27,7 @@ def get_point(label: str, image_name: str, xml: str):
     key_for_ignore = 0
     key_for_skin = 0
     pts = []
+    # Finding an image and creating a list of coordinates
     for i in root.findall('image'):
         if i.attrib['name'].split('/')[-1] == image_name:
             for j in i.findall('polygon'):
@@ -54,6 +55,7 @@ def get_black_img(image: str, labels: list, xml: str):
     pic = cv2.imread(image, -1)
     img = np.zeros(pic.shape, dtype='uint8')
     color = get_skin_color(xml)
+    # Traversing all coordinates, converting lists to NumPy Array, filling a polygon
     for label in labels:
         if label == 'Skin':
             pts = get_point(label='Skin', image_name=image_name, xml=xml)
@@ -76,6 +78,7 @@ def get_mask_for_ignore(image: str, labels: list, xml: str):
     mask = np.zeros(pic.shape, dtype='uint8')
     channel_count = pic.shape[2]
     ignore_mask_color = (255,) * channel_count
+    # Traversing ignore coordinates, converting lists to NumPy Array, filling a polygon
     for label in labels:
         if label == 'Ignore':
             pts = get_point(label='Ignore', image_name=image_name, xml=xml)
@@ -93,6 +96,7 @@ def get_orig_img_with_mask(image: str, labels: list, xml: str):
     mask = get_mask_for_ignore(image, labels=labels, xml=xml)
     img = cv2.bitwise_and(pic.copy(), mask)
     color = get_skin_color(xml)
+    # Traversing all coordinates, converting lists to NumPy Array, filling a polygon
     for label in labels:
         if label == 'Skin':
             pts = get_point(label='Skin', image_name=image_name, xml=xml)
