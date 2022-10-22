@@ -4,9 +4,9 @@ import numpy as np
 import os
 
 
-def get_skin_color(xml_file: str):
+def get_skin_color(xml: str):
     """Get skin color from xml file"""
-    tree = ET.parse(xml_file)
+    tree = ET.parse(xml)
     root = tree.getroot()
 
     for meta in root.findall('meta'):
@@ -18,9 +18,9 @@ def get_skin_color(xml_file: str):
                         return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 
-def get_point(label: str, image_name: str):
+def get_point(label: str, image_name: str, xml: str):
     """Gets the coordinates for the masks and returns a dictionary with all the faces of the polygon"""
-    tree = ET.parse('masks.xml')
+    tree = ET.parse(xml)
     root = tree.getroot()
     ignore = dict()
     skin = dict()
@@ -56,12 +56,12 @@ def get_black_img(image: str, labels: list, xml: str):
     color = get_skin_color(xml)
     for label in labels:
         if label == 'Skin':
-            pts = get_point(label='Skin', image_name=image_name)
+            pts = get_point(label='Skin', image_name=image_name, xml=xml)
             for i, j in pts.items():
                 pts = np.array(j, np.int32)
                 cv2.fillPoly(img, pts=[pts], color=color)
         elif label == 'Ignore':
-            pts = get_point(label='Ignore', image_name=image_name)
+            pts = get_point(label='Ignore', image_name=image_name, xml=xml)
             for i, j in pts.items():
                 pts = np.array(j, np.int32)
                 cv2.fillPoly(img, pts=[pts], color=(0, 0, 0))
@@ -69,7 +69,7 @@ def get_black_img(image: str, labels: list, xml: str):
     return cv2.imwrite(f'D:\Python\Repo\-TrainingDataSolutions\ex2\\black_image_with_mask\\{image_name}', img)
 
 
-def get_mask_for_ignore(image: str, labels: list):
+def get_mask_for_ignore(image: str, labels: list, xml: str):
     """Gets the mask to ignore on the original background"""
     image_name = image.split('\\')[-1]
     pic = cv2.imread(image, -1)
@@ -78,7 +78,7 @@ def get_mask_for_ignore(image: str, labels: list):
     ignore_mask_color = (255,) * channel_count
     for label in labels:
         if label == 'Ignore':
-            pts = get_point(label='Ignore', image_name=image_name)
+            pts = get_point(label='Ignore', image_name=image_name, xml=xml)
             for i, j in pts.items():
                 pts = np.array(j, np.int32)
                 cv2.fillPoly(mask, pts=[pts], color=ignore_mask_color)
@@ -90,17 +90,17 @@ def get_orig_img_with_mask(image: str, labels: list, xml: str):
     """Gets a mask on original background"""
     image_name = image.split('\\')[-1]
     pic = cv2.imread(image, -1)
-    mask = get_mask_for_ignore(image, labels=labels)
+    mask = get_mask_for_ignore(image, labels=labels, xml=xml)
     img = cv2.bitwise_and(pic.copy(), mask)
     color = get_skin_color(xml)
     for label in labels:
         if label == 'Skin':
-            pts = get_point(label='Skin', image_name=image_name)
+            pts = get_point(label='Skin', image_name=image_name, xml=xml)
             for i, j in pts.items():
                 pts = np.array(j, np.int32)
                 cv2.fillPoly(pic, pts=[pts], color=color)
         elif label == 'Ignore':
-            pts = get_point(label='Ignore', image_name=image_name)
+            pts = get_point(label='Ignore', image_name=image_name, xml=xml)
             for i, j in pts.items():
                 pts = np.array(j, np.int32)
                 cv2.fillPoly(pic, pts=[pts], color=(0, 0, 0))
