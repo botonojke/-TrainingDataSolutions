@@ -22,7 +22,6 @@ def total_stats(file_name):
         all_image += 1
 
         scree = int(i.get('width')) * int(i.get('height'))
-        # print(f"{scree} = {i.get('width')}:{i.get('height')}")
         if scree > x:
             x = scree
             max_name = f"{i.get('name')}"

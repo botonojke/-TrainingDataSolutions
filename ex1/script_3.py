@@ -3,8 +3,6 @@ from collections import Counter
 import os
 
 
-
-
 def parse_xml(file_name):
     with open(file_name) as xml_file:
         xml = xml_file.read()
@@ -28,8 +26,8 @@ def parse_xml(file_name):
 
 for root, dirs, files in os.walk('.'):
     for file in files:
-        # if file.endswith("copy.xml"):
-        #     continue
+        if file.endswith("copy.xml"):
+            continue
         if file.endswith(".xml"):
             path_file = os.path.join(root, file)
             parse_xml(path_file)
