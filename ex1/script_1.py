@@ -74,7 +74,7 @@ def total_stats(file_name):
                f"Всего изображений: {len(images)}\n" \
                f"Всего изображений размечено: {get_annotated_images(images=images)}\n" \
                f"Всего фигур {len(get_all_figure(images=images))}\n" \
-               f"asdsadaasddasdas {largest_image}, таких изображений в файле {screens.count(max(screens))}\n" \
+               f"Самое большasdasое изображение {largest_image}, таких изображений в файле {screens.count(max(screens))}\n" \
                f"Пример: {name_largest_image}\n" \
                f"Самое маленькое изображение {smallest_image}, таких изображений в файле {screens.count(min(screens))}\n" \
                f"Пример: {name_smallest_image}\n\n"
